@@ -34,7 +34,7 @@ def train(model,
           optimizer, 
           loss_object,
           epochs,
-          checkpoinr_dir
+          _checkpoint_dir
           ):
     for epoch in range(epochs):
         start = time.time()
@@ -75,7 +75,7 @@ def train(model,
                        'val_accuracy': round(val_acc, 4),
                 }
 
-            save_checkpoint(base_directory_path = checkpoinr_dir, 
+            save_checkpoint(base_directory_path = checkpoint_dir, 
                             to_save = to_save,
                             score_name = 'val_accuracy',
                             n_saved = 3,
@@ -101,7 +101,7 @@ def main():
                         type=str,
                         default='',
                         help='path to the valid_data.txt file')
-    parser.add_argument('--checkpoinr_dir', 
+    parser.add_argument('--checkpoint_dir', 
                         type=str,
                         default='saved_checkpoints',
                         help='path to the checkpoint directory. The checkpoints will be saved here')
@@ -191,7 +191,7 @@ def main():
           optimizer, 
           loss_object,
           args.epochs,
-          args.checkpoinr_dir
+          args.checkpoint_dir
           )
 
 
