@@ -307,13 +307,20 @@ def remove_long_sens(sens, tags, max_len = 80):
 
 
 
-def prepare_dataset_for_train(path):
-    r"""
+def prepare_dataset_for_train(path, 
+                              delimiters = delimiters, 
+                              mapping_dic = mapping_dic
+                              ):
+    f"""
     This function removes sentences that exceed the maximum allowed length.
 
     Args:
         path (`string`):
             Path to a .txt file related to the Bijankhan dataset.
+        delimiters (`list`, *optional*, {delimiters}):
+            A list of delimiters (string) to convert the entire dataset into multiple sentences.
+        mapping_dic (`dict`, *optional*, defaults to {mapping_dic}):
+            A dictionary to convert a tag to another tag.
 
     Returns:
         _sens (`dict`): 
