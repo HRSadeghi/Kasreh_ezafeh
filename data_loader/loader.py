@@ -136,7 +136,7 @@ class Kasreh_DataLoader(Dataset):
         encoded_sens = self.tokenizer(_sens_batch , return_tensors='pt', padding=True)
 
         # Aligning tags with subwords after the tokenizer is applied to sentences
-        _out_labels = self.align_tokens_and_labels(encoded_sens, tags_batch)
+        _out_labels = self._align_tokens_and_labels(encoded_sens, tags_batch)
 
         # Converting the tags of each sentence to indices
         encoded_labels = self._encode_labels(_out_labels)
