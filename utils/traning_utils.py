@@ -18,6 +18,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import time
 from torchmetrics import MeanMetric
+from transformers import AutoTokenizer, AutoModelForMaskedLM, BertConfig
+
 
 loss_object = nn.CrossEntropyLoss(reduction='none')
 
@@ -97,8 +99,25 @@ def evaluate(dataLoader, model):
 
             _loss.update(loss.cpu().item())
             _accuracy.update(acc.cpu().item())
-            
+
     mean_loss = _loss.compute().cpu().item()
     mean_acc = _accuracy.compute().cpu().item()
 
     return mean_loss, mean_acc
+
+
+
+def load_pretrained_bert_model(model_name = 'HooshvareLab/bert-fa-zwnj-base', 
+                               output_hidden_states = True):
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    config = BertConfig.from_pretrained(model_name,
+                                        output_hidden_states=output_hidden_states)
+    model = AutoModelForMaskedLM.from_pretrained(model_name, config=config)
+
+    return tokenizer, model
+
+
+
+def get_device():
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    return device
