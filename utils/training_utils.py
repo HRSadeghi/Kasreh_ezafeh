@@ -21,7 +21,6 @@ from torchmetrics import MeanMetric
 from transformers import AutoTokenizer, AutoModelForMaskedLM, BertConfig
 
 
-loss_object = nn.CrossEntropyLoss(reduction='none')
 
 
 
@@ -56,7 +55,7 @@ def train_step(model,
                input,
                tags, 
                optimizer, 
-               loss_object = loss_object, 
+               loss_object, 
                train_loss = None, 
                train_accuracy = None):
     # Step 1. Remember that Pytorch accumulates gradients.

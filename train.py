@@ -14,12 +14,55 @@
 
 
 from utils.data_preprocessing import prepare_dataset_for_train
-from utils.training_utils import load_pretrained_bert_model, get_device
+from utils.training_utils import load_pretrained_bert_model, get_device, train_step, evaluate
 from utils.tag_mapping import get_tag2idx_idx2tag_dics, mapping_dic
 from models.BERT_BiLSTM import BERTBiLSTMTagger
 from data_loader.loader import Kasreh_DataLoader
+from torchmetrics import MeanMetric
 from sklearn.model_selection import train_test_split
+import torch.optim as optim
+import torch.nn as nn
+import time
 import argparse
+
+
+def train(model, 
+          train_dataLoader, 
+          val_dataLoader, 
+          optimizer, 
+          loss_object,
+          epochs,
+          ):
+    for epoch in range(epochs):
+        start = time.time()
+
+        train_loss = MeanMetric()
+        train_accuracy = MeanMetric()
+
+        for batch, (input, tags) in enumerate(train_dataLoader):
+            train_step(model, 
+                       input, 
+                       tags, 
+                       optimizer,
+                       loss_object,
+                       train_loss = train_loss,
+                       train_accuracy = train_accuracy
+                       )
+
+            if batch % 100 == 0:
+                print(f'Epoch {epoch + 1} Batch {batch} Train_loss {train_loss.compute().cpu().item():.4f} Train_accuracy {train_accuracy.compute().cpu().item():.4f}')
+
+
+        val_loss, val_acc = evaluate(val_dataLoader, model)
+
+        print(f'Epoch {epoch + 1} Batch {batch} Train_loss {train_loss.compute().cpu().item():.4f} Train_accuracy {train_accuracy.compute().cpu().item():.4f}    Val_loss {val_loss:.4f} Val_accuracy {val_acc:.4f}')
+        print(f'Time taken for 1 epoch: {time.time() - start:.2f} secs\n')
+        if (epoch + 1) % 1 == 0:
+            #ckpt_save_path = ckpt_manager.save()
+            ckpt_save_path = '---'
+            print(f'Saving checkpoint for epoch {epoch+1} at {ckpt_save_path}')
+
+
 
 
 
@@ -37,6 +80,17 @@ def main():
                         type=str,
                         default='',
                         help='path to the valid_data.txt file')
+
+    parser.add_argument('--batch_size', 
+                        type=int,
+                        default=64,
+                        help='path to the valid_data.txt file')
+
+    parser.add_argument('--epochs', 
+                        type=int,
+                        default=2,
+                        help='path to the valid_data.txt file')
+
 
     parser.add_argument('--valid_size', 
                         type=float,
@@ -60,7 +114,7 @@ def main():
     if args.test_file_path != '':
         train_sens, val_sens, train_tags, val_tags = train_test_split(train_sens, train_tags, test_size=args.valid_size, random_state=42)
     else:
-        test_sens, test_tags = prepare_dataset_for_train(args.test_file_path)
+        val_sens, val_tags = prepare_dataset_for_train(args.valid_size)
 
     device = get_device()
     tag2idx, idx2tag = get_tag2idx_idx2tag_dics()
@@ -76,7 +130,7 @@ def main():
                            tag2idx = tag2idx,
                            mapping_dic = mapping_dic, 
                            device=device,
-                           batch_size = 64)
+                           batch_size = args.batch_size)
 
 
     val_dataLoader = Kasreh_DataLoader(val_sens, 
@@ -85,7 +139,7 @@ def main():
                             tag2idx = tag2idx,
                             mapping_dic = mapping_dic, 
                             device=device,
-                            batch_size = 64)
+                            batch_size = args.batch_size)
 
 
     test_dataLoader = Kasreh_DataLoader(test_sens, 
@@ -94,11 +148,26 @@ def main():
                             tag2idx = tag2idx,
                             mapping_dic = mapping_dic, 
                             device=device,
-                            batch_size = 64)
+                            batch_size = args.batch_size)
 
     print('Creating BERT BiLSTM model ...')   
     model = BERTBiLSTMTagger(bert_model = bert_model)
     model = model.to(device)
+
+    optimizer = optim.SGD(model.parameters(), lr=0.1)
+    loss_object = nn.CrossEntropyLoss(reduction='none')
+
+
+    print('Starting to train model ...')  
+    train(model, 
+          train_dataLoader, 
+          val_dataLoader, 
+          optimizer, 
+          loss_object,
+          args.epochs,
+          )
+
+
 
 
 
