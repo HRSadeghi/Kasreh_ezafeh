@@ -41,7 +41,7 @@ class BERTBiLSTMTagger(nn.Module):
     ```"""
     def __init__(self,
                  bert_model, 
-                 no_of_bert_layers = 7,
+                 no_of_bert_layer = 7,
                  bert_out_dim = 768, 
                  lstm_dim  = 128,  
                  num_classes = 3 
@@ -49,7 +49,7 @@ class BERTBiLSTMTagger(nn.Module):
                  
         super(BERTBiLSTMTagger, self).__init__()
         
-        self.no_of_bert_layer = no_of_bert_layers
+        self.no_of_bert_layer = no_of_bert_layer
         self.lstm = nn.LSTM(bert_out_dim, lstm_dim, bidirectional=True, num_layers=1)
         self.bert_model = bert_model
         self.linear = nn.Linear(2*lstm_dim, num_classes)
