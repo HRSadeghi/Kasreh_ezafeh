@@ -18,12 +18,14 @@ from utils.training_utils import load_pretrained_bert_model, get_device, train_s
 from utils.tag_mapping import get_tag2idx_idx2tag_dics, mapping_dic
 from models.BERT_BiLSTM import BERTBiLSTMTagger
 from data_loader.loader import Kasreh_DataLoader
+from handlers.checkpoint_handler import save_checkpoint
 from torchmetrics import MeanMetric
 from sklearn.model_selection import train_test_split
 import torch.optim as optim
 import torch.nn as nn
 import time
 import argparse
+
 
 
 def train(model, 
@@ -55,12 +57,30 @@ def train(model,
 
         val_loss, val_acc = evaluate(val_dataLoader, model, loss_object)
 
-        print(f'Epoch {epoch + 1} Batch {batch} Train_loss {train_loss.compute().cpu().item():.4f} Train_accuracy {train_accuracy.compute().cpu().item():.4f}    Val_loss {val_loss:.4f} Val_accuracy {val_acc:.4f}')
+
+        t_loss = train_loss.compute().cpu().item()
+        t_acc = train_accuracy.compute().cpu().item()
+
+        print(f'Epoch {epoch + 1} Batch {batch} Train_loss {t_loss:.4f} Train_accuracy {t_acc:.4f}    Val_loss {val_loss:.4f} Val_accuracy {val_acc:.4f}')
         print(f'Time taken for 1 epoch: {time.time() - start:.2f} secs\n')
         if (epoch + 1) % 1 == 0:
             #ckpt_save_path = ckpt_manager.save()
-            ckpt_save_path = '---'
-            print(f'Saving checkpoint for epoch {epoch+1} at {ckpt_save_path}')
+            to_save = {'epoch': epoch + 1,
+                       'model_state_dict': model.state_dict(),
+                       'optimizer_state_dict': optimizer.state_dict(),
+                       'train_loss': round(t_loss, 4),
+                       'train_accuracy': round(t_acc, 4),
+                       'val_loss': round(val_loss, 4),
+                       'val_accuracy': round(val_acc, 4),
+                }
+
+            save_checkpoint(base_directory_path = '/content/Kasreh_checkpoints', 
+                            to_save = to_save,
+                            score_name = 'val_accuracy',
+                            n_saved = 3,
+                            filename_prefix = 'best',
+                            ext = 'pt'
+                        )
 
 
 
