@@ -24,6 +24,9 @@ def save_checkpoint(base_directory_path,
                     filename_prefix = 'best',
                     ext = 'pt'
                     ):
+
+    if not os.path.exists(base_directory_path):
+        os.mkdir(base_directory_path)
     def read_files_in_directory():
         files = [file for file in os.listdir(base_directory_path) if file.endswith(f".{ext}")]
         scores = [float('.'.join(f.split('=')[1].split('.')[:-1])) for f in files]
@@ -72,7 +75,7 @@ def load_checkpoint(base_directory_path,
 
     for k in checkpoint.keys():
         if 'state_dict' in k:
-            if k in to_load.keys()
+            if k in to_load.keys():
                 to_load[k].load_state_dict(checkpoint[k])
         else:
             to_load[k] = checkpoint[k]
