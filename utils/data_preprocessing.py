@@ -15,12 +15,14 @@
 
 import logging
 import re
+from .tag_mapping import mapping_dic, get_tag2idx_idx2tag_dics
+from .delimiters import delimiters
 
 def read_Bijankhan_dataset(path):
     r"""
     A function to take a batch of input and output data corresponding to the input and output of the neural network used
     Args:
-        index (`string`):
+        path (`string`):
             Path to a .txt file related to the Bijankhan dataset.
 
     Returns:
@@ -301,4 +303,34 @@ def remove_long_sens(sens, tags, max_len = 80):
         if len(x) < max_len:
             _sens.append(x)
             _tags.append(y)
+    return _sens, _tags
+
+
+
+def prepare_dataset_for_train(path):
+    r"""
+    This function removes sentences that exceed the maximum allowed length.
+
+    Args:
+        path (`string`):
+            Path to a .txt file related to the Bijankhan dataset.
+
+    Returns:
+        _sens (`dict`): 
+            A list of all necessary sentences for training. Each sentence is in the form of a list of words.
+        _tags (`torch.Tensor`): 
+            A list of all necessary tags for training. Each tag itself is a list that shows the tag of each corresponding word.
+    """
+
+    _section = read_Bijankhan_dataset(path)
+    map_tags(_section, mapping_dic)
+
+    _sens, _tags = split_data(_section, delimiters)
+    _sens, _tags = remove_sens_containing_english(_sens, _tags)
+    _sens = remove_punctuation(_sens)
+    _sens = clean(_sens)
+    _sens, _tags = remove_and_split_tokens(_sens, _tags, mapping_dic)
+    _sens, _tags = remove_empty_samples(_sens, _tags)
+    _sens, _tags = remove_long_sens(_sens, _tags)
+
     return _sens, _tags
