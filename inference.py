@@ -16,12 +16,14 @@
 from utils.training_utils import load_pretrained_bert_model, get_device, train_step, evaluate
 from utils.tag_mapping import get_tag2idx_idx2tag_dics
 from models.BERT_BiLSTM import BERTBiLSTMTagger
+from data_loader.loader import Kasreh_DataLoader
 from handlers.checkpoint_handler import load_checkpoint
 import torch
 import torch.optim as optim
 import torch.nn as nn
 import time
 import argparse
+
 
 
 def inference(input_sen,
@@ -46,9 +48,11 @@ def inference(input_sen,
     out_ids = torch.argmax(__o[0], -1).detach().cpu().numpy()
     out_labels = [idx2tag[x] for x in out_ids]
 
+    output = ''
     for x,y in zip(input_tokens, out_labels):
-        print(x,y)
-
+        output += x + '\t' + y + '\n'
+    
+    output = output[:-1] + '#######'
 
 
 
@@ -60,6 +64,14 @@ def main():
                         type=str,
                         default='',
                         help='A sentence in Persian language')
+    parser.add_argument('--input_text_file', 
+                        type=str,
+                        default='',
+                        help='A .txt file where each of its lines is Persian sentence')
+    parser.add_argument('--input_text_file', 
+                        type=str,
+                        default='',
+                        help='A .txt file where each of its lines is Persian sentence')
 
     parser.add_argument('--checkpoint_dir', 
                         type=str,
@@ -94,18 +106,28 @@ def main():
 
     to_load={
             'model_state_dict': model,
-            'optimizer_state_dict': optimizer,
             }
 
     load_checkpoint(args.checkpoint_dir, to_load)
 
-
+    print(f'Finding Kasreh for {args.input_sen} ...')
     inference(args.input_sen,
               model,
               tokenizer,
               idx2tag,
               device = device)
 
+
+    with open('filename') as f:
+        all_sens = f.readlines()
+
+    dataLoader = Kasreh_DataLoader(all_sens, 
+                                   val_tags = None,
+                                   tokenizer = tokenizer, 
+                                   tag2idx = None,
+                                   mapping_dic = None, 
+                                   device=device,
+                                   batch_size = args.batch_size)
 
 
 

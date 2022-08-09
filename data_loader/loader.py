@@ -126,28 +126,33 @@ class Kasreh_DataLoader(Dataset):
 
         # Getting a batch of sentences and tags according to the start and end index
         sens_batch = self.all_sens[start:end]
-        tags_batch = self.all_tags[start:end]
+        if self.all_tags is not None:
+            tags_batch = self.all_tags[start:end]
         ###
 
         # Concatenating all words and creating sentence for each input sample
         _sens_batch = [' '.join(x) for x in sens_batch]
         
         # Tokenizing sentences using the pre-trained BERT tokenizer
-        encoded_sens = self.tokenizer(_sens_batch , return_tensors='pt', padding=True)
+        encoded_sens = self.tokenizer(_sens_batch, return_tensors='pt', padding=True)
 
-        # Aligning tags with subwords after the tokenizer is applied to sentences
-        _out_labels = self._align_tokens_and_labels(encoded_sens, tags_batch)
+        if self.all_tags is not None:
+            # Aligning tags with subwords after the tokenizer is applied to sentences
+            _out_labels = self._align_tokens_and_labels(encoded_sens, tags_batch)
 
-        # Converting the tags of each sentence to indices
-        encoded_labels = self._encode_labels(_out_labels)
+            # Converting the tags of each sentence to indices
+            encoded_labels = self._encode_labels(_out_labels)
 
         # Switching execution to CPU or CUDA
         encoded_sens = encoded_sens.to(self.device)
-        encoded_labels = encoded_labels.to(self.device)
+        if self.all_tags is not None:
+            encoded_labels = encoded_labels.to(self.device)
         ##
 
-
-        return encoded_sens, encoded_labels
+        if self.all_tags is not None:
+            return encoded_sens, encoded_labels
+        else:
+            return encoded_sens
 
 
 

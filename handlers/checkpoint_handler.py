@@ -72,7 +72,8 @@ def load_checkpoint(base_directory_path,
 
     for k in checkpoint.keys():
         if 'state_dict' in k:
-            to_load[k].load_state_dict(checkpoint[k])
+            if k in to_load.keys()
+                to_load[k].load_state_dict(checkpoint[k])
         else:
             to_load[k] = checkpoint[k]
 
