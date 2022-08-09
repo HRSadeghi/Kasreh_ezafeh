@@ -103,7 +103,7 @@ def main():
                         help='path to the valid_data.txt file')
     parser.add_argument('--checkpoinr_dir', 
                         type=str,
-                        default='',
+                        default='saved_checkpoints',
                         help='path to the checkpoint directory. The checkpoints will be saved here')
 
     parser.add_argument('--batch_size', 
