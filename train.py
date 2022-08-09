@@ -154,8 +154,9 @@ def main():
     model = BERTBiLSTMTagger(bert_model = bert_model)
     model = model.to(device)
 
-    optimizer = optim.SGD(model.parameters(), lr=0.1)
+    
     loss_object = nn.CrossEntropyLoss(reduction='none')
+    optimizer = optim.SGD(model.parameters(), lr=0.1)
 
 
     print('Starting to train model ...')  

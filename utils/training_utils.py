@@ -39,7 +39,7 @@ def accuracy_function(input, real_tar, pred):
 def loss_function(input, 
                   real, 
                   pred, 
-                  loss_object = loss_object):
+                  loss_object):
   mask = torch.logical_not(torch.eq(input['attention_mask'], 0))
   loss_ = loss_object(pred, real)
 
