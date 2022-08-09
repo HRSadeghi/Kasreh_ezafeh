@@ -51,10 +51,12 @@ def main():
 
 
 
-
-    train_sens, train_tags = prepare_dataset_for_train(args.train_file_path)    
+    print('Preparing training dataset ...')
+    train_sens, train_tags = prepare_dataset_for_train(args.train_file_path)
+    print('Preparing test dataset ...')    
     test_sens, test_tags = prepare_dataset_for_train(args.test_file_path)
 
+    print('Preparing validation dataset ...')   
     if args.test_file_path != '':
         train_sens, val_sens, train_tags, val_tags = train_test_split(train_sens, train_tags, test_size=args.valid_size, random_state=42)
     else:
@@ -63,7 +65,10 @@ def main():
     device = get_device()
     tag2idx, idx2tag = get_tag2idx_idx2tag_dics()
 
+    print('Preparing dataloaders ...')   
     tokenizer, bert_model = load_pretrained_bert_model(model_name = args.Pretrained_BERT_model_name)
+
+
 
     train_dataLoader = Kasreh_DataLoader(train_sens, 
                            train_tags,
@@ -91,7 +96,7 @@ def main():
                             device=device,
                             batch_size = 64)
 
-
+    print('Creating BERT BiLSTM model ...')   
     model = BERTBiLSTMTagger(bert_model = bert_model)
     model = model.to(device)
 
