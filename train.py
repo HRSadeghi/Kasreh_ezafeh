@@ -34,7 +34,7 @@ def train(model,
           optimizer, 
           loss_object,
           epochs,
-          _checkpoint_dir
+          checkpoint_dir
           ):
     for epoch in range(epochs):
         start = time.time()
