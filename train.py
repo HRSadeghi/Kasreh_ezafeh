@@ -14,7 +14,7 @@
 
 
 from utils.data_preprocessing import prepare_dataset_for_train
-from utils.traning_utils import load_pretrained_bert_model, get_device
+from utils.training_utils import load_pretrained_bert_model, get_device
 from utils.tag_mapping import get_tag2idx_idx2tag_dics, mapping_dic
 from models.BERT_BiLSTM import BERTBiLSTMTagger
 from data_loader.loader import Kasreh_DataLoader
