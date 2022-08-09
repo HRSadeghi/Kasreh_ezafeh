@@ -126,6 +126,11 @@ def main():
                         type=str,
                         default='HooshvareLab/bert-fa-zwnj-base',
                         help='The name of pretrained BERT model or a path to pretrained BERT model')
+
+    parser.add_argument('--no_of_bert_layers', 
+                        type=int,
+                        default=7,
+                        help='Number of bert layers that is used in new model')
     args = parser.parse_args()
 
 
@@ -176,7 +181,7 @@ def main():
                             batch_size = args.batch_size)
 
     print('Creating BERT BiLSTM model ...')   
-    model = BERTBiLSTMTagger(bert_model = bert_model)
+    model = BERTBiLSTMTagger(bert_model = bert_model, no_of_bert_layers = args.no_of_bert_layers)
     model = model.to(device)
 
     
