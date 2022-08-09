@@ -86,14 +86,18 @@ def train_step(model,
 
 
 
-def evaluate(dataLoader, model): 
+def evaluate(dataLoader, 
+             model,
+             loss_object
+             ): 
+
     _loss = MeanMetric()
     _accuracy = MeanMetric()
     for batch, (input, tags) in enumerate(dataLoader):
         with torch.no_grad():
             tag_scores = model(input)
             tag_scores = torch.permute(tag_scores, [0,2,1])
-            loss = loss_function(input, tags, tag_scores)
+            loss = loss_function(input, tags, tag_scores, loss_object)
             acc = accuracy_function(input, tags, torch.permute(tag_scores, [0,2,1]))
 
             _loss.update(loss.cpu().item())

@@ -53,7 +53,7 @@ def train(model,
                 print(f'Epoch {epoch + 1} Batch {batch} Train_loss {train_loss.compute().cpu().item():.4f} Train_accuracy {train_accuracy.compute().cpu().item():.4f}')
 
 
-        val_loss, val_acc = evaluate(val_dataLoader, model)
+        val_loss, val_acc = evaluate(val_dataLoader, model, loss_object)
 
         print(f'Epoch {epoch + 1} Batch {batch} Train_loss {train_loss.compute().cpu().item():.4f} Train_accuracy {train_accuracy.compute().cpu().item():.4f}    Val_loss {val_loss:.4f} Val_accuracy {val_acc:.4f}')
         print(f'Time taken for 1 epoch: {time.time() - start:.2f} secs\n')
