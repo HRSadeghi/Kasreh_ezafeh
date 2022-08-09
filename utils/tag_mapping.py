@@ -20,3 +20,24 @@ mapping_dic = {
                 'y': 'ye', 
                 'ye': 'ye'
             }
+
+def get_tag2idx_idx2tag_dics():
+    r"""
+        Denotes the number of batches per epoch.
+
+        Returns:
+            tag2idx (`dict`):
+                A dictionary that maps each tag to an index.
+            idx2tag (`dict`):
+                A dictionary that maps each index to a tag.
+        """
+        
+    tag_set = sorted(list(set(mapping_dic.values())))
+
+    tag2idx = dict()
+    idx2tag = dict()
+
+    for i,x in enumerate(tag_set):
+        tag2idx[x] = i
+        idx2tag[i] = x
+    return tag2idx, idx2tag
