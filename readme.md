@@ -1,4 +1,6 @@
 # Kasreh Ezafeh (Genitive Conjunction /e/) in Persian Language
+In this project, we intend to identify the conjunction /e/ which is created due to the existence of genitive phrases in Persian language. Since there is no general rule in Persian language to recognize this conjunction, therefore neural models have been used in this repository. The neural model used here is a combination of BERT and BiLSTM networks, which detects this conjunction with high performance.
+
 <br>
 
 ## Persian genitive phrases
