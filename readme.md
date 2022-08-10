@@ -64,5 +64,24 @@ In general, if the nucleus ends in /ɒ/, /u/ or /e/, then the letter ِ /e/ beco
 
 
 
+## Recognition of conjunction /e/ with BERT-BiLSTM neural network
+
+### Installation
+We provide instructions how to install dependencies via  pip.
+First, clone the repository locally:
+
+```
+git clone https://github.com/HRSadeghi/Kasreh_ezafeh.git
+```
+
+Change the current directory to NeuralPersianPoet:
+```
+cd NeuralPersianPoet
+```
+
+Now, prepare environment:
+```
+pip install -r requirements.txt
+```
 
 
