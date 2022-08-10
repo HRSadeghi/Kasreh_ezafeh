@@ -5,6 +5,7 @@
 According to [this source](https://www.dastur.info/persian-grammar/10-attributes-and-attribution/#bb), in Persian language, Genitive is a kind of phrase syntax that sets two constituents in a hierarchical relationship (normally using the enclitical conjunction /-e/).
 
 The superordinate constituent is called the nucleus, which is determined semantically by the second constituent, the modifier. The modifier is a special form of attribute:
+
 ![attribute2_EN.png](images/attribute2_EN.png)
 
 Genitive phrases are normally endocentric, which means that the nucleus (or the modifier) is the reference of the genitive phrase. For example, /bærg-e ʧenɒr/ برگِ چنار is a determining of /bærg/ برگ, and /mɒh-e ordibeheʃt/ ماهِ اردیبهشت a specification of /mɒh/ ماه.
