@@ -42,3 +42,17 @@ The genitive can be classified in Persian as follows:
 <br/><br/>
 
 
+### Syntax of Genitive
+Genitive phrases are normally syndetical (meaning that they have a conjunction). Nevertheless, some qualitative genitive phrases are used asyndetically (often regarding to phonological reasons): /rezɒ bærɒhæni/ رضا براهنی, /mærd-i irɒni/ مردی ایرانی
+
+genitive phrases cannot contain many constituents. Nevertheless, they can be interlaced:
+
+1. Genitive phrases can be used as modifiers of other genitive phrases:<br/><br/>
+![modifiers_of_other_genitive.png](images/modifiers_of_other_genitive.png)
+<br/><br/>
+
+2. Qualitative genitive phrases can also become nuclei of other genitive phrases: <br/><br/>
+![nuclei_of_other_genitives.png](images/nuclei_of_other_genitives.png)
+<br/><br/>
+
+
