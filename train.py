@@ -18,7 +18,7 @@ from utils.training_utils import load_pretrained_bert_model, get_device, train_s
 from utils.tag_mapping import get_tag2idx_idx2tag_dics, mapping_dic
 from models.BERT_BiLSTM import BERTBiLSTMTagger
 from data_loader.loader import Kasreh_DataLoader
-from handlers.checkpoint_handler import save_checkpoint
+from handlers.checkpoint_handler import save_checkpoint, load_checkpoint
 from torchmetrics import MeanMetric
 from sklearn.model_selection import train_test_split
 import torch.optim as optim
@@ -34,7 +34,8 @@ def train(model,
           optimizer, 
           loss_object,
           epochs,
-          checkpoint_dir
+          checkpoint_dir,
+          n_saved_ckpts
           ):
     for epoch in range(epochs):
         start = time.time()
@@ -78,7 +79,7 @@ def train(model,
             save_checkpoint(base_directory_path = checkpoint_dir, 
                             to_save = to_save,
                             score_name = 'val_accuracy',
-                            n_saved = 3,
+                            n_saved = n_saved_ckpts,
                             filename_prefix = 'best',
                             ext = 'pt'
                         )
@@ -105,7 +106,14 @@ def main():
                         type=str,
                         default='saved_checkpoints',
                         help='path to the checkpoint directory. The checkpoints will be saved here')
-
+    parser.add_argument('--load_checkpoint_dir', 
+                        type=str,
+                        default='',
+                        help='path to the current checkpoint directory to load pretrained weights')
+    parser.add_argument('--n_saved_ckpts', 
+                        type=int,
+                        default=3,
+                        help='number of saved models in checkpoint directory')
     parser.add_argument('--batch_size', 
                         type=int,
                         default=64,
@@ -188,6 +196,15 @@ def main():
     loss_object = nn.CrossEntropyLoss(reduction='none')
     optimizer = optim.SGD(model.parameters(), lr=0.1)
 
+    if args.load_checkpoint_dir != '':
+        print('Loading model weights ...')   
+        to_load={
+                'model_state_dict': model,
+                'optimizer_state_dict': optimizer
+                }
+
+        load_checkpoint(args.load_checkpoint_dir, to_load)
+
 
     print('Starting to train model ...')  
     train(model, 
@@ -196,7 +213,8 @@ def main():
           optimizer, 
           loss_object,
           args.epochs,
-          args.checkpoint_dir
+          args.checkpoint_dir,
+          args.n_saved_ckpts
           )
 
 
