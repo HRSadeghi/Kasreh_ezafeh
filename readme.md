@@ -56,3 +56,7 @@ genitive phrases cannot contain many constituents. Nevertheless, they can be int
 <br/><br/>
 
 
+In general, if the nucleus ends in /ɒ/, /u/ or /e/, then the letter ِ /e/ becomes ی /je/:
+
+
+
