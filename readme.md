@@ -76,7 +76,7 @@ git clone https://github.com/HRSadeghi/Kasreh_ezafeh.git
 
 Change the current directory to NeuralPersianPoet:
 ```
-cd NeuralPersianPoet
+cd Kasreh_ezafeh
 ```
 
 Now, prepare environment:
