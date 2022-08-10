@@ -71,17 +71,9 @@ def main():
     args = parser.parse_args()
 
 
-
-    print('Preparing training dataset ...')
-    train_sens, train_tags = prepare_dataset_for_train(args.train_file_path)
     print('Preparing test dataset ...')    
     test_sens, test_tags = prepare_dataset_for_train(args.test_file_path)
 
-    print('Preparing validation dataset ...')   
-    if args.test_file_path != '':
-        train_sens, val_sens, train_tags, val_tags = train_test_split(train_sens, train_tags, test_size=args.valid_size, random_state=42)
-    else:
-        val_sens, val_tags = prepare_dataset_for_train(args.valid_size)
 
     device = get_device()
     tag2idx, idx2tag = get_tag2idx_idx2tag_dics()
@@ -116,7 +108,7 @@ def main():
     print('Starting to train model ...')  
     val_loss, val_acc, duration = _evaluate(model, 
                                             test_dataLoader, 
-                                            loss_object,
+                                            loss_object
                                             )
     print(f'Val_loss {val_loss:.4f} Val_accuracy {val_acc:.4f}')
     print(f'Duration_time: {duration:4f}')
